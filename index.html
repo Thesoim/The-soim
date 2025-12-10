@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Soim - ذا سويم</title>
+    <style>
+        /* --- CSS Styles --- */
+
+        /* استدعاء الخط */
+        @font-face {
+            font-family: 'PixelAE';
+            src: url('PixelAE-Bold.ttf') format('truetype');
+        }
+
+        /* المتغيرات العامة */
+        :root {
+            --main-bg: #000000;
+            --accent-color: #7D1B7E;
+            --text-color: #ffffff;
+            --neon-glow: 0 0 10px #7D1B7E, 0 0 20px #7D1B7E;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--main-bg);
+            color: var(--text-color);
+            font-family: 'PixelAE', 'Courier New', monospace; /* خط بديل في حال عدم وجود الخط */
+            overflow-x: hidden;
+        }
+
+        /* --- شاشة المقدمة (Intro) --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* خلفية سوداء مظلمة مع تأثير متحرك خفيف (تدرج لوني يتنفس) */
+            background-color: #000000;
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #000000 80%);
+            background-size: 200% 200%;
+            animation: darkBreath 10s ease-in-out infinite alternate;
+
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* حركة الخلفية المظلمة */
+        @keyframes darkBreath {
+            0% { background-size: 150% 150%; }
+            100% { background-size: 250% 250%; }
+        }
+
+        #intro-img {
+            cursor: pointer;
+            /* جعل الصورة كبيرة جداً في المنتصف */
+            width: 75%; /* تشغل 75% من عرض الشاشة */
+            max-width: 900px; /* حد أقصى لكي لا تكون عملاقة جداً على الشاشات الكبيرة */
+            min-width: 350px; /* حد أدنى لضمان ظهورها بشكل جيد على الجوال */
+            height: auto; /* الحفاظ على نسبة الطول والعرض */
+            
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.8)); /* ظل عميق */
+            transition: transform 0.5s ease, filter 0.5s ease;
+            
+            /* إضافة تأثير نبض خفيف للصورة لجعلها حية */
+            animation: subtlePulse 3s infinite ease-in-out;
+        }
+
+        /* حركة نبض خفيفة للصورة */
+        @keyframes subtlePulse {
+            0% { transform: scale(1); opacity: 0.95; }
+            50% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.95; }
+        }
+
+        #intro-img:hover {
+            transform: scale(1.05); /* تكبير إضافي عند مرور الماوس */
+            /* توهج بلون الثيم عند مرور الماوس */
+            filter: drop-shadow(0 0 40px var(--accent-color)); 
+        }
+
+        #intro-video {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+            z-index: 10000; /* التأكد من أن الفيديو فوق كل شيء عند تشغيله */
+        }
+
+        /* --- الرأس والقائمة (Header & Nav) --- */
+        .logo-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .main-logo {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-bottom: 2px solid var(--accent-color);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 1000;
+            flex-wrap: wrap;
+        }
+
+        .sticky-nav button, .nav-link-btn {
+            background: var(--main-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 8px 15px;
+            font-family: 'PixelAE', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px var(--accent-color);
+        }
+
+        .sticky-nav button:hover, .nav-link-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: var(--neon-glow);
+        }
+
+        /* --- أقسام المحتوى --- */
+        main {
+            padding: 20px;
+            min-height: 80vh;
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        .active-section {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- شبكة الألعاب (Games Grid) --- */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .game-card {
+            border: 2px solid var(--accent-color);
+            padding: 15px;
+            border-radius: 10px;
+            background: #050505;
+            box-shadow: 0 0 8px var(--accent-color);
+            text-align: center;
+            position: relative;
+        }
+
+        /* عارض الصور (Carousel) */
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #333;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* يجعل الصورة كاملة داخل المربع */
+            background: #111;
+            display: none;
+        }
+
+        .carousel img.active {
+            display: block;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.7);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px 10px;
+            z-index: 2;
+        }
+
+        .carousel-btn.left { left: 0; }
+        .carousel-btn.right { right: 0; }
+
+        .game-title {
+            color: var(--accent-color);
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
+        .game-info {
+            font-size: 0.9em;
+            color: #ccc;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .download-btn, .guide-btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 8px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 0 0 10px var(--accent-color);
+            border: none;
+            cursor: pointer;
+            font-family: 'PixelAE', monospace;
+            font-size: 12px;
+        }
+
+        .guide-btn {
+            background: #4a104b;
+            margin-right: 5px;
+        }
+
+        .download-btn:hover {
+            background: #9e229f;
+        }
+
+        /* --- التنقل بين الصفحات (Pagination) --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .pagination button {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: 'PixelAE', monospace;
+        }
+
+        .pagination button:disabled {
+            border-color: #333;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        /* --- قسم "من أنا" (Home / About) --- */
+        .about-card {
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
+            line-height: 1.8;
+            border: 1px solid var(--accent-color);
+            padding: 30px;
+            box-shadow: inset 0 0 20px rgba(125, 27, 126, 0.2);
+        }
+
+        .about-card h2 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .action-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .neon-btn {
+            background: transparent;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            padding: 10px 20px;
+            text-decoration: none;
+            font-family: 'PixelAE', monospace;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .neon-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: var(--neon-glow);
+        }
+
+        /* --- شبكة الحسابات (Accounts) --- */
+        .accounts-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .account-card {
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .account-card:hover {
+            transform: scale(1.1);
+        }
+
+        .account-card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 5px var(--accent-color));
+        }
+
+        /* --- النافذة المنبثقة (Modal) --- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.9); 
+        }
+
+        .modal-content {
+            background-color: #111;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid var(--accent-color);
+            width: 80%;
+            max-width: 500px;
+            color: white;
+            box-shadow: 0 0 20px var(--accent-color);
+            position: relative;
+            direction: rtl;
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro-overlay">
+        <img src="zr.png" id="intro-img" alt="Start">
+        <video id="intro-video">
+            <source src="zero.mp4" type="video/mp4">
+            متصفحك لا يدعم الفيديو.
+        </video>
+    </div>
+
+    <div id="main-site" style="display: none;">
+        
+        <header>
+            <div class="logo-container">
+                <img src="thesoim.png" alt="The Soim Logo" class="main-logo">
+            </div>
+            <nav class="sticky-nav">
+                <button onclick="showSection('home')">الرئيسية</button>
+                <button onclick="showSection('translations')">التعريبات</button>
+                <button onclick="showSection('accounts')">حساباتي</button>
+                <a href="https://t.me/ftaxx" target="_blank" class="nav-link-btn">تواصل معي</a>
+            </nav>
+        </header>
+
+        <main>
+            
+            <section id="translations" class="active-section">
+                <div id="games-container" class="games-grid">
+                    </div>
+
+                <div class="pagination">
+                    <button id="prev-btn" onclick="changePage(-1)">السابق</button>
+                    <span id="page-indicator">صفحة 1</span>
+                    <button id="next-btn" onclick="changePage(1)">التالي</button>
+                </div>
+            </section>
+
+            <section id="home" class="hidden-section">
+                <div class="about-card">
+                    <h2>ذا سويم | The Soim</h2>
+                    <p>مطور ومعدّل محترف في عالم ألعاب وتطبيقات الأندرويد.</p>
+                    <p>أعمل على تعريب الألعاب والتطبيقات بجودة عالية مع الحفاظ على روح المحتوى الأصلية، وأهتم بتقديم تجربة استخدام سلسة وواضحة للمستخدم العربي.</p>
+                    <br>
+                    <p>متخصص في تعديل الألعاب، تحسين الأداء، إصلاح الأخطاء، وإضافة مميزات جديدة تجعل اللعبة أو التطبيق أكثر ثباتًا، سرعة، ومتعة في الاستخدام.</p>
+                    <br>
+                    <p>أقدّم أيضًا تحسينات بصرية وصوتية، وضبط الإعدادات الداخلية للألعاب لتناسب الأجهزة الضعيفة والمتوسطة بدون التضحية بجودة التجربة.</p>
+                    <br>
+                    <p>أسعى دائماً لتقديم نسخ محسنة، نظيفة، ومتكاملة تناسب الجميع، مع التركيز على الاحترافية، الدقة، وخبرة طويلة في هذا المجال.</p>
+                    
+                    <div class="action-buttons">
+                        <a href="https://t.me/ftaxx" target="_blank" class="neon-btn">تواصل معي</a>
+                        <button onclick="showSection('accounts')" class="neon-btn">حساباتي</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="accounts" class="hidden-section">
+                <div class="accounts-grid">
+                    <a href="https://www.instagram.com/ftxxax?igsh=MTQzZmNjM3IyMGE4cg==" target="_blank" class="account-card">
+                        <img src="insta.png" alt="Instagram">
+                        <h3>Instagram</h3>
+                    </a>
+                    <a href="https://youtube.com/@ftaxx?si=OUMRgkPTAl30DpCe" target="_blank" class="account-card">
+                        <img src="youtube.png" alt="YouTube">
+                        <h3>YouTube</h3>
+                    </a>
+                    <a href="https://t.me/soi7m" target="_blank" class="account-card">
+                        <img src="telegram.png" alt="Telegram">
+                        <h3>Telegram</h3>
+                    </a>
+                    <a href="https://www.tiktok.com/@thsoim?_r=1&_t=ZS-924zNX7dBEi" target="_blank" class="account-card">
+                        <img src="tiktok.png" alt="TikTok">
+                        <h3>TikTok</h3>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="instruction-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3>طريقة إضافة التعريب (The Wolf Among Us)</h3>
+            <div class="modal-body">
+                <p>1. استخدم تطبيق ZArchiver (متوفر في متجر بلاي).</p>
+                <p>2. استخرج ملف التعريب وسيظهر لك مجلد باسم <strong>Telltale</strong>.</p>
+                <p>3. انقل مجلد Telltale إلى ذاكرة الهاتف الداخلية بجانب مجلدات: <strong>Download Android</strong>.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- JavaScript Logic ---
+
+        // Game Data Array
+        const games = [
+            {
+                id: 1,
+                title: "OMORI",
+                images: ["omori1.png", "omori2.png", "omori3.png"],
+                downloadLink: "https://pixeldrain.com/u/chYHHRMy",
+                version: "v1.0.8.1",
+                size: "993MB",
+                platform: "Android"
+            },
+            {
+                id: 2,
+                title: "The Wolf Among Us",
+                images: ["wolf1.png", "wolf2.png", "wolf3.png"],
+                downloadLink: "https://pixeldrain.com/u/5Goz2NnR",
+                fileLink: "https://pixeldrain.com/u/homJHrvn", // ملف التعريب
+                hasGuide: true,
+                version: "v1.23",
+                size: "2.34GB",
+                platform: "Android"
+            },
+            {
+                id: 3,
+                title: "Loop Hero",
+                images: ["loop1.png", "loop2.png", "loop3.png", "loop4.png"],
+                downloadLink: "https://pixeldrain.com/u/dhVHN4vt",
+                version: "v1.0.5",
+                size: "208MB",
+                platform: "Android"
+            },
+            {
+                id: 4,
+                title: "Seven Mysteries",
+                images: ["sevenmysteries1.png", "sevenmysteries2.png", "sevenmysteries3.png"],
+                downloadLink: "https://pixeldrain.com/u/vSY6Miye",
+                version: "v1.7",
+                size: "94MB",
+                platform: "Android"
+            },
+            {
+                id: 5,
+                title: "Undertale Red",
+                images: ["UndertaleRed1.png", "UndertaleRed2.png", "UndertaleRed3.png"],
+                downloadLink: "https://pixeldrain.com/u/1baa2Ci6",
+                version: "v1.0.0",
+                size: "27MB",
+                platform: "Android"
+            },
+            {
+                id: 6,
+                title: "Our Monsoon Balcony",
+                images: ["OurMonsoonBalcony1.png", "OurMonsoonBalcony2.png", "OurMonsoonBalcony3.png", "OurMonsoonBalcony4.png"],
+                downloadLink: "https://pixeldrain.com/u/GCUTArQL",
+                version: "v2.2.2",
+                size: "14MB",
+                platform: "Android"
+            },
+            {
+                id: 7,
+                title: "The Henry Stickmin Collection",
+                images: ["TheHenryStickminCollection1.png", "TheHenryStickminCollection2.png"],
+                downloadLink: "https://pixeldrain.com/u/qxzpD7fB",
+                version: "v0.2",
+                size: "411MB",
+                platform: "Android"
+            },
+            {
+                id: 8,
+                title: "Stickman Completing the Mission",
+                images: ["StickmanCompletingtheMission1.png", "StickmanCompletingtheMission2.png", "StickmanCompletingtheMission3.png"],
+                downloadLink: "https://pixeldrain.com/u/5DEpMhTV",
+                version: "v1.0",
+                size: "269MB",
+                platform: "Android"
+            },
+            {
+                id: 9,
+                title: "Twilight Railway",
+                images: ["TwilightRailway1.png", "TwilightRailway2.png", "TwilightRailway3.png", "TwilightRailway4.png"],
+                isComingSoon: true,
+                version: "v1.0.0",
+                size: "187MB",
+                platform: "Android"
+            },
+            {
+                id: 10,
+                title: "Door Kickers",
+                images: ["DoorKickers.png"],
+                isComingSoon: true,
+                version: "v1.1.35",
+                size: "467MB",
+                platform: "Android"
+            }
+        ];
+
+        // --- Variables ---
+        const itemsPerPage = 4;
+        let currentPage = 1;
+
+        // --- Intro Logic ---
+        const introImg = document.getElementById('intro-img');
+        const introVideo = document.getElementById('intro-video');
+        const introOverlay = document.getElementById('intro-overlay');
+        const mainSite = document.getElementById('main-site');
+
+        introImg.addEventListener('click', () => {
+            introImg.style.display = 'none';
+            introVideo.style.display = 'block';
+            introVideo.volume = 1.0; 
+            introVideo.play();
+        });
+
+        introVideo.addEventListener('ended', () => {
+            introOverlay.style.transition = 'opacity 1s';
+            introOverlay.style.opacity = '0';
+            setTimeout(() => {
+                introOverlay.style.display = 'none';
+                mainSite.style.display = 'block';
+                renderGames(); // Load games after intro
+            }, 1000);
+        });
+
+        // --- Tab Switching Logic ---
+        function showSection(sectionId) {
+            document.querySelectorAll('main section').forEach(sec => {
+                sec.classList.remove('active-section');
+                sec.classList.add('hidden-section');
+            });
+            
+            const target = document.getElementById(sectionId === 'translations' ? 'translations' : sectionId);
+            
+            if(sectionId === 'translations') {
+                document.getElementById('translations').classList.add('active-section');
+                document.getElementById('translations').classList.remove('hidden-section');
+            } else {
+                target.classList.add('active-section');
+                target.classList.remove('hidden-section');
+            }
+        }
+
+        // --- Games Rendering & Pagination ---
+        function renderGames() {
+            const container = document.getElementById('games-container');
+            container.innerHTML = ''; 
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageGames = games.slice(startIndex, endIndex);
+
+            pageGames.forEach(game => {
+                // Create Images HTML
+                let imagesHtml = '';
+                game.images.forEach((img, index) => {
+                    imagesHtml += `<img src="${img}" class="${index === 0 ? 'active' : ''}" data-index="${index}">`;
+                });
+
+                // Create Buttons HTML
+                let buttonsHtml = '';
+                if (game.isComingSoon) {
+                    buttonsHtml = `<button class="download-btn" disabled style="background:#555; cursor:default;">قريباً</button>`;
+                } else {
+                    buttonsHtml += `<a href="${game.downloadLink}" target="_blank" class="download-btn">تحميل</a>`;
+                    if (game.fileLink) {
+                        buttonsHtml += `<a href="${game.fileLink}" target="_blank" class="download-btn" style="margin-right:5px">ملف التعريب</a>`;
+                    }
+                    if (game.hasGuide) {
+                        buttonsHtml += `<br><button onclick="openModal()" class="guide-btn">طريقة إضافة التعريب</button>`;
+                    }
+                }
+
+                const cardHtml = `
+                    <div class="game-card" id="game-${game.id}">
+                        <div class="carousel">
+                            <button class="carousel-btn left" onclick="prevSlide(${game.id})">&#10094;</button>
+                            <div class="carousel-imgs">${imagesHtml}</div>
+                            <button class="carousel-btn right" onclick="nextSlide(${game.id})">&#10095;</button>
+                        </div>
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-info">
+                            ${game.version}<br>
+                            الحجم ${game.size}<br>
+                            ${game.platform}
+                        </div>
+                        ${buttonsHtml}
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+
+            updatePaginationControls();
+        }
+
+        function updatePaginationControls() {
+            const totalPages = Math.ceil(games.length / itemsPerPage);
+            document.getElementById('page-indicator').innerText = `صفحة ${currentPage} من ${totalPages}`;
+            
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage === totalPages;
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.ceil(games.length / itemsPerPage);
+            if ((direction === -1 && currentPage > 1) || (direction === 1 && currentPage < totalPages)) {
+                currentPage += direction;
+                renderGames();
+                window.scrollTo(0, 0); 
+            }
+        }
+
+        // --- Carousel Logic ---
+        function nextSlide(gameId) {
+            const card = document.getElementById(`game-${gameId}`);
+            const imgs = card.querySelectorAll('.carousel-imgs img');
+            let activeIndex = 0;
+            imgs.forEach((img, index) => {
+                if(img.classList.contains('active')) activeIndex = index;
+                img.classList.remove('active');
+            });
+            
+            let nextIndex = (activeIndex + 1) % imgs.length;
+            imgs[nextIndex].classList.add('active');
+        }
+
+        function prevSlide(gameId) {
+            const card = document.getElementById(`game-${gameId}`);
+            const imgs = card.querySelectorAll('.carousel-imgs img');
+            let activeIndex = 0;
+            imgs.forEach((img, index) => {
+                if(img.classList.contains('active')) activeIndex = index;
+                img.classList.remove('active');
+            });
+            
+            let prevIndex = (activeIndex - 1 + imgs.length) % imgs.length;
+            imgs[prevIndex].classList.add('active');
+        }
+
+        // --- Modal Logic ---
+        function openModal() {
+            document.getElementById('instruction-modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('instruction-modal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('instruction-modal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
