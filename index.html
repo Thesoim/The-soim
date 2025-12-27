@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Soim - ذا سويم</title>
+    <style>
+        /* --- RESET & FONTS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* --- VIDEO BACKGROUND --- */
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: fill; 
+            z-index: -100;
+            filter: brightness(35%) contrast(115%); /* تعتيم وتناقض لزيادة الفخامة */
+        }
+
+        body {
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- HEADER & NAV --- */
+        header {
+            text-align: center;
+            padding-top: 20px;
+            padding-bottom: 60px;
+        }
+
+        .logo-container img {
+            max-width: 250px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px auto;
+            filter: drop-shadow(0 0 15px rgba(200, 0, 0, 0.4));
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.8); /* خلفية داكنة شفافة */
+            backdrop-filter: blur(15px); /* تأثير ضبابي قوي */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            padding: 12px 0;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.6);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* --- LUXURY NAV BUTTONS --- */
+        nav button {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            padding: 6px 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 30px; /* حواف دائرية بالكامل */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        nav button:hover, nav button.active {
+            background: linear-gradient(90deg, #800000, #500000);
+            border-color: #ff3333;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* --- MAIN CONTENT SECTIONS --- */
+        .section {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 80px auto 50px auto;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HOME (ABOUT) --- */
+        .about-card {
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .about-card h1 { color: #ff3333; margin-bottom: 20px; font-weight: 900; text-shadow: 0 0 10px rgba(255,0,0,0.3); }
+        .about-card p { margin-bottom: 15px; line-height: 1.8; color: #bbb; font-size: 1.1rem; }
+        
+        .contact-btn {
+            display: inline-block;
+            background: linear-gradient(180deg, #900000, #500000);
+            color: white;
+            padding: 12px 40px;
+            border-radius: 50px;
+            margin-top: 25px;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+            border: 1px solid #ff4444;
+        }
+        .contact-btn:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        /* --- ACCOUNTS --- */
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        .account-card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+            cursor: pointer;
+        }
+        .account-card:hover { transform: translateY(-8px); border-color: #800000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .account-card img { width: 60px; height: 60px; margin-bottom: 15px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+        .account-card h3 { margin-bottom: 10px; font-weight: 700; }
+
+        /* --- TRANSLATIONS (GRID & BLOODY BORDER) --- */
+        .games-grid {
+            display: grid;
+            /* تصغير حجم الأعمدة: من 280px إلى 220px */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px; /* تقليل الفراغات قليلاً */
+            padding: 20px;
+        }
+
+        /* The Game Card Container */
+        .game-card {
+            position: relative;
+            background: rgba(15, 15, 15, 0.9);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1;
+            padding: 2px;
+            /* تصغير الطول: من 450px إلى 390px */
+            height: 390px;
+            transition: transform 0.3s;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px); /* حركة بسيطة عند التمرير على الكارت */
+        }
+
+        /* Bloody Rotating Border Logic */
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, #ff0000);
+            animation: rotate 4s linear infinite;
+            z-index: -2;
+        }
+        
+        .game-card::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: #111; /* لون أغمق قليلاً من السابق */
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+            padding: 12px; /* تقليل الحشو */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .image-slider {
+            position: relative;
+            /* تصغير ارتفاع الصورة ليتناسب مع البطاقة الأصغر */
+            height: 160px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .image-slider img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            transition: transform 0.3s;
+        }
+        .image-slider:hover img { transform: scale(1.05); }
+        .image-slider img.active { display: block; }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 5px;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .image-slider:hover .slider-nav { opacity: 1; }
+
+        .slider-nav button {
+            background: rgba(0,0,0,0.8);
+            border: none;
+            color: #ff3333;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 50%;
+        }
+
+        .game-info {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .game-title {
+            color: #fff;
+            font-size: 1.1rem; /* تصغير الخط قليلاً */
+            margin-bottom: 5px;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        .game-meta {
+            font-size: 0.75rem; /* تصغير الخط */
+            color: #999;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* --- LUXURY ACTION BUTTONS --- */
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            /* تدرج لوني فخم */
+            background: linear-gradient(180deg, #900000 0%, #500000 100%);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 6px;
+            border: 1px solid #ff4444;
+            /* ظل داخلي وخارجي */
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        .download-btn:hover { 
+            background: linear-gradient(180deg, #b00000 0%, #700000 100%);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .download-btn.secondary { 
+            background: linear-gradient(180deg, #333 0%, #1a1a1a 100%);
+            border-color: #555;
+            color: #ccc;
+        }
+        .download-btn.secondary:hover { 
+            background: linear-gradient(180deg, #444 0%, #222 100%);
+            color: #fff;
+            border-color: #777;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+
+        /* --- PAGINATION --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 40px;
+            padding-bottom: 40px;
+        }
+        .page-btn {
+            padding: 8px 18px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #444;
+            color: white;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+        .page-btn:hover:not(:disabled) {
+            background: #800000;
+            border-color: #ff0000;
+        }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .page-info { font-weight: bold; color: #ff3333; font-size: 1.1rem; }
+
+        /* --- MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.92);
+            overflow: auto;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #151515, #050505);
+            border: 1px solid #800000;
+            width: 100%;
+            max-width: 650px;
+            border-radius: 15px;
+            position: relative;
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(128, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #888;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-modal:hover { color: #ff3333; transform: rotate(90deg); }
+
+        .modal-details-box {
+            border: 1px solid #333;
+            background: rgba(30, 30, 30, 0.5);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            text-align: right;
+        }
+        .modal-details-box h3 { color: #ff3333; margin-bottom: 10px; }
+        .modal-details-box p { color: #ddd; margin-bottom: 8px; font-size: 0.95rem; line-height: 1.6; }
+        .stat-badge {
+            display: inline-block;
+            background: #111;
+            color: #ff3333;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            border: 1px solid #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .instruction-step {
+            text-align: right;
+            margin: 10px 0;
+            padding: 12px;
+            background: linear-gradient(90deg, #1a1a1a, #111);
+            border-right: 3px solid #ff0000;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop playsinline id="video-bg">
+        <source src="sss.mp4" type="video/mp4">
+    </video>
+
+    <nav>
+        <ul>
+            <li><button onclick="switchTab('home')">الرئيسية</button></li>
+            <li><button onclick="switchTab('translations')" class="active" id="btn-trans">التعريبات</button></li>
+            <li><button onclick="switchTab('accounts')">حساباتي</button></li>
+            <li><button onclick="location.href='https://t.me/ftaxx'">تواصل معي</button></li>
+        </ul>
+    </nav>
+
+    <header>
+        <div class="logo-container" style="margin-top: 60px;">
+            <img src="thesoim.png" alt="THE SOIM LOGO" onerror="this.style.display='none'; document.getElementById('logo-text').style.display='block'">
+            <h1 id="logo-text" style="display:none; color:#ff3333; font-size:3rem; text-shadow: 0 0 10px red;">THE SOIM</h1>
+        </div>
+    </header>
+
+    <section id="home" class="section">
+        <div class="about-card">
+            <h1>ذا سويم | The Soim</h1>
+            <p>مطور ومعدّل محترف في عالم ألعاب وتطبيقات الأندرويد.</p>
+            <p>أعمل على تعريب الألعاب والتطبيقات بجودة عالية مع الحفاظ على روح المحتوى الأصلية، وأهتم بتقديم تجربة استخدام سلسة وواضحة للمستخدم العربي.</p>
+            <p>متخصص في تعديل الألعاب، تحسين الأداء، إصلاح الأخطاء، وإضافة مميزات جديدة تجعل اللعبة أو التطبيق أكثر ثباتًا، سرعة، ومتعة في الاستخدام.</p>
+            <p>أقدّم أيضًا تحسينات بصرية وصوتية، وضبط الإعدادات الداخلية للألعاب لتناسب الأجهزة الضعيفة والمتوسطة بدون التضحية بجودة التجربة.</p>
+            <p>أسعى دائماً لتقديم نسخ محسنة، نظيفة، ومتكاملة تناسب الجميع، مع التركيز على الاحترافية، الدقة، وخبرة طويلة في هذا المجال.</p>
+            <a href="https://t.me/ftaxx" class="contact-btn">تواصل معي</a>
+        </div>
+    </section>
+
+    <section id="translations" class="section active">
+        <div class="games-grid" id="games-container"></div>
+        <div class="pagination">
+            <button class="page-btn" id="prevBtn" onclick="changePage(-1)">السابق</button>
+            <span class="page-info" id="pageIndicator">صفحة 1</span>
+            <button class="page-btn" id="nextBtn" onclick="changePage(1)">التالي</button>
+        </div>
+    </section>
+
+    <section id="accounts" class="section">
+        <div class="accounts-grid">
+            <div class="account-card" onclick="window.location.href='https://www.instagram.com/ftxxax?igsh=MTQzZmNjM3IyMGE4cg=='">
+                <img src="insta.png" alt="Instagram">
+                <h3>Instagram</h3>
+            </div>
+            <div class="account-card" onclick="window.location.href='https://youtube.com/@ftaxx?si=OUMRgkPTAl30DpCe'">
+                <img src="youtube.png" alt="YouTube">
+                <h3>YouTube</h3>
+            </div>
+            <div class="account-card" onclick="window.location.href='https://t.me/soi7m'">
+                <img src="telegram.png" alt="Telegram">
+                <h3>Telegram</h3>
+            </div>
+            <div class="account-card" onclick="window.location.href='https://www.tiktok.com/@thsoim?_r=1&_t=ZS-924zNX7dBEi'">
+                <img src="tiktok.png" alt="TikTok">
+                <h3>TikTok</h3>
+            </div>
+        </div>
+    </section>
+
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('gameModal')">&times;</span>
+            <h2 id="modalTitle" style="color: #ff3333; margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,0,0,0.4);">Game Name</h2>
+            <div class="image-slider" id="modalSlider"></div>
+            <div class="modal-details-box">
+                <p id="modalStory">وصف القصة...</p>
+                <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+                    <span class="stat-badge" id="modalTime">وقت اللعب: --</span>
+                    <span class="stat-badge" id="modalEndings">عدد النهايات: --</span>
+                </div>
+            </div>
+            <div id="modalButtons"></div>
+        </div>
+    </div>
+
+    <div id="instructionModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-modal" onclick="closeModal('instructionModal')">&times;</span>
+            <h3 style="color: #ff3333; margin-bottom: 20px;">طريقة إضافة التعريب</h3>
+            <div class="instruction-step">1. استخدم تطبيق ZArchiver (متوفر في متجر بلاي).</div>
+            <div class="instruction-step">2. استخرج ملف التعريب وسيظهر لك مجلد باسم Telltale.</div>
+            <div class="instruction-step">3. انقل مجلد Telltale إلى ذاكرة الهاتف الداخلية بجانب مجلدات: Download Android</div>
+        </div>
+    </div>
+
+    <script>
+        const games = [
+            {
+                name: "Twilight Railway",
+                images: ["https://files.catbox.moe/hpm4g4.jpg", "https://files.catbox.moe/ou2scx.png", "https://files.catbox.moe/2egjuf.png"],
+                version: "v1.0.0",
+                size: "187MB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/KDnCt4eD",
+                story: "رحلة غامضة عبر قطار يسافر بين الأحلام والذكريات. هل يمكنك استعادة ما فُقد؟ قصة مؤثرة بأسلوب بصري فريد.",
+                time: "2-3 ساعات",
+                endings: "نهاية واحدة"
+            },
+            {
+                name: "OMORI",
+                images: ["omori1.png", "omori2.png", "omori3.png"],
+                version: "v1.0.8.1",
+                size: "993MB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/chYHHRMy",
+                story: "استكشف عالمًا غريبًا مليئًا بالألوان والأصدقاء والأعداء. اختر طريقك، فمصيرك ومصير أصدقائك يعتمد على خياراتك. لعبة رعب نفسي بامتياز.",
+                time: "20-30 ساعة",
+                endings: "متعددة"
+            },
+            {
+                name: "The Wolf Among Us",
+                images: ["wolf1.png", "wolf2.png", "wolf3.png"],
+                version: "v1.23",
+                size: "2.34GB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/5Goz2NnR",
+                transFile: "https://pixeldrain.com/u/homJHrvn",
+                hasInstructions: true,
+                story: "قصة مبنية على القصص المصورة Fables. العب دور Bigby Wolf واكتشف جرائم قتل وحشية في عالم تختلط فيه الشخصيات الخيالية بالواقع المظلم.",
+                time: "8-10 ساعات",
+                endings: "خيارات مؤثرة"
+            },
+            {
+                name: "Loop Hero",
+                images: ["loop1.png", "loop2.png", "loop3.png", "loop4.png"],
+                version: "v1.0.5",
+                size: "208MB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/dhVHN4vt",
+                story: "ألقى اللش العالم في حلقة زمنية لا نهائية. استخدم البطاقات لبناء الخريطة وتجهيز بطلك لكسر الحلقة.",
+                time: "20+ ساعة",
+                endings: "نهاية واحدة (مع أسرار)"
+            },
+            {
+                name: "Seven Mysteries",
+                images: ["sevenmysteries1.png", "sevenmysteries2.png", "sevenmysteries3.png"],
+                version: "v1.7",
+                size: "94MB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/vSY6Miye",
+                story: "لعبة رعب أنمي كلاسيكية. تدور الأحداث في مدرسة ليلاً حيث يكتشف الطلاب أسراراً مرعبة.",
+                time: "1-2 ساعة",
+                endings: "متعددة"
+            },
+            {
+                name: "Undertale Red",
+                images: ["UndertaleRed1.png", "UndertaleRed2.png", "UndertaleRed3.png"],
+                version: "v1.0.0",
+                size: "27MB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/1baa2Ci6",
+                story: "معركة مروحة (Fan-game) متقنة لشخصية جديدة في عالم أندرتيل. تجربة قتالية فريدة بأسلوب الحوار والرحمة أو القتل.",
+                time: "30 دقيقة",
+                endings: "متعددة"
+            },
+            {
+                name: "Our Monsoon Balcony",
+                images: ["OurMonsoonBalcony1.png", "OurMonsoonBalcony2.png", "OurMonsoonBalcony3.png", "OurMonsoonBalcony4.png"],
+                version: "v2.2.2",
+                size: "14MB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/GCUTArQL",
+                story: "رواية بصرية قصيرة وهادئة تدور أحداثها خلال الرياح الموسمية. محادثات عميقة وأجواء مريحة.",
+                time: "ساعة واحدة",
+                endings: "نهاية واحدة"
+            },
+            {
+                name: "The Henry Stickmin Collection",
+                images: ["TheHenryStickminCollection1.png", "TheHenryStickminCollection2.png"],
+                version: "v0.2",
+                size: "411MB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/qxzpD7fB",
+                story: "مجموعة مغامرات Henry Stickmin الشهيرة. اختر طريقك بطرق فكاهية وغريبة للفشل أو النجاح.",
+                time: "4 ساعات",
+                endings: "كثيرة جداً (Fails & Wins)"
+            },
+            {
+                name: "Stickman Completing the Mission",
+                images: ["StickmanCompletingtheMission1.png", "StickmanCompletingtheMission2.png", "StickmanCompletingtheMission3.png"],
+                version: "v1.0",
+                size: "269MB",
+                platform: "Android",
+                link: "https://pixeldrain.com/u/5DEpMhTV",
+                story: "الجزء الأضخم من سلسلة Henry Stickmin. تحالفات مختلفة وخطط مجنونة لاقتحام أو سرقة أو تدمير الأعداء.",
+                time: "2-3 ساعات",
+                endings: "16 نهاية مختلفة"
+            },
+            {
+                name: "Door Kickers",
+                images: ["DoorKickers.png"],
+                version: "v1.1.35",
+                size: "467MB",
+                platform: "Android",
+                link: null,
+                story: "لعبة استراتيجية تكتيكية تتحكم فيها بفرقة تدخل سريع (SWAT). خطط بدقة، ونفذ بسرعة.",
+                time: "لا نهائي",
+                endings: "-"
+            }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            if(tabId === 'translations') document.getElementById('btn-trans').classList.add('active');
+            if(tabId === 'home') document.querySelector('nav button[onclick="switchTab(\'home\')"]').classList.add('active');
+            if(tabId === 'accounts') document.querySelector('nav button[onclick="switchTab(\'accounts\')"]').classList.add('active');
+        }
+
+        function renderGames() {
+            const container = document.getElementById('games-container');
+            container.innerHTML = '';
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const displayedGames = games.slice(start, end);
+
+            displayedGames.forEach((game, index) => {
+                let imgsHtml = '';
+                game.images.forEach((img, i) => {
+                    imgsHtml += `<img src="${img}" class="${i === 0 ? 'active' : ''}" data-index="${i}">`;
+                });
+                
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <div class="card-content">
+                        <div class="image-slider" id="slider-${start + index}" onclick="openGameDetails(${start + index})">
+                            ${imgsHtml}
+                            <div class="slider-nav">
+                                <button onclick="event.stopPropagation(); moveSlide('${start + index}', -1)">&#10094;</button>
+                                <button onclick="event.stopPropagation(); moveSlide('${start + index}', 1)">&#10095;</button>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-title">${game.name}</div>
+                            <div class="game-meta">
+                                <span>${game.version}</span> | <span>${game.size}</span> | <span>${game.platform}</span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            ${game.link ? 
+                                `<a href="${game.link}" target="_blank" class="download-btn">تحميل</a>` : 
+                                `<button class="download-btn secondary" disabled>قريباً</button>`
+                            }
+                            ${game.transFile ? 
+                                `<a href="${game.transFile}" target="_blank" class="download-btn secondary">ملف التعريب</a>` : ''
+                            }
+                             ${game.hasInstructions ? 
+                                `<button onclick="openInstructions()" class="download-btn secondary" style="border-color:#ff9900; color:#ff9900;">طريقة إضافة التعريب</button>` : ''
+                            }
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('pageIndicator').innerText = `صفحة ${currentPage}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = end >= games.length;
+        }
+
+        function moveSlide(sliderIdSuffix, direction) {
+            const slider = document.getElementById(`slider-${sliderIdSuffix}`);
+            const images = slider.querySelectorAll('img');
+            let activeIndex = 0;
+            images.forEach((img, i) => {
+                if (img.classList.contains('active')) activeIndex = i;
+                img.classList.remove('active');
+            });
+            let newIndex = activeIndex + direction;
+            if (newIndex < 0) newIndex = images.length - 1;
+            if (newIndex >= images.length) newIndex = 0;
+            images[newIndex].classList.add('active');
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            renderGames();
+            window.scrollTo(0, 0);
+        }
+
+        function openGameDetails(gameGlobalIndex) {
+            const game = games[gameGlobalIndex];
+            const modal = document.getElementById('gameModal');
+            
+            document.getElementById('modalTitle').innerText = game.name;
+            document.getElementById('modalStory').innerText = game.story;
+            document.getElementById('modalTime').innerText = "وقت اللعب: " + game.time;
+            document.getElementById('modalEndings').innerText = "النهايات: " + game.endings;
+
+            const modalSlider = document.getElementById('modalSlider');
+            let imgsHtml = '';
+            game.images.forEach((img, i) => {
+                imgsHtml += `<img src="${img}" class="${i === 0 ? 'active' : ''}">`;
+            });
+            modalSlider.innerHTML = `
+                ${imgsHtml}
+                 <div class="slider-nav">
+                    <button onclick="moveModalSlide(-1)">&#10094;</button>
+                    <button onclick="moveModalSlide(1)">&#10095;</button>
+                </div>
+            `;
+
+            const btnContainer = document.getElementById('modalButtons');
+            let btnsHtml = '';
+            if (game.link) btnsHtml += `<a href="${game.link}" target="_blank" class="download-btn">تحميل اللعبة</a>`;
+            if (game.transFile) btnsHtml += `<a href="${game.transFile}" target="_blank" class="download-btn secondary">ملف التعريب فقط</a>`;
+            if (game.hasInstructions) btnsHtml += `<button onclick="openInstructions()" class="download-btn secondary" style="margin-top:10px;">طريقة التثبيت</button>`;
+            if (!game.link) btnsHtml += `<button class="download-btn secondary" disabled>قريباً</button>`;
+            
+            btnContainer.innerHTML = btnsHtml;
+            modal.style.display = "flex";
+        }
+
+        function moveModalSlide(direction) {
+            const slider = document.getElementById('modalSlider');
+            const images = slider.querySelectorAll('img');
+            let activeIndex = 0;
+            images.forEach((img, i) => {
+                if(img.classList.contains('active')) activeIndex = i;
+                img.classList.remove('active');
+            });
+            let newIndex = activeIndex + direction;
+            if(newIndex < 0) newIndex = images.length - 1;
+            if(newIndex >= images.length) newIndex = 0;
+            images[newIndex].classList.add('active');
+        }
+
+        function openInstructions() {
+            document.getElementById('instructionModal').style.display = "flex";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        window.onload = function() {
+            renderGames();
+        };
+    </script>
+</body>
+</html>
