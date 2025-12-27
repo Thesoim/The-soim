@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Soim - ذا سويم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff0000;
+            --bg-color: #050505;
+            --card-bg: #111;
+            --text-color: #f0f0f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* خلفية الجسيمات */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- الهيدر (الشريط العلوي المصغر) --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.98);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px 0; /* تقليل الحواف */
+            border-bottom: 1px solid #222;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo-container img {
+            height: 50px; /* تصغير الشعار */
+            object-fit: contain;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.1));
+        }
+
+        nav {
+            display: flex;
+            gap: 8px; /* تقليل المسافة بين الأزرار */
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: #ccc;
+            border: 1px solid #333;
+            padding: 3px 12px; /* تصغير حجم الزر */
+            font-size: 12px;   /* تصغير الخط */
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+            box-shadow: 0 0 8px rgba(255,255,255,0.4);
+        }
+
+        /* --- المحتوى الرئيسي --- */
+        main {
+            padding-top: 110px; /* تعديل المسافة لأن الهيدر صغر */
+            padding-bottom: 40px;
+            width: 95%;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- مربعات الألعاب (مصغرة وواضحة) --- */
+        .games-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .game-card {
+            position: relative;
+            width: 230px; /* عرض أصغر */
+            background: var(--card-bg);
+            border-radius: 6px;
+            padding: 3px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            overflow: hidden;
+        }
+
+        /* الإطار الدموي */
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, #800000, #ff0000);
+            animation: rotate-border 4s linear infinite;
+            z-index: 0;
+        }
+        @keyframes rotate-border { 100% { transform: rotate(360deg); } }
+
+        .game-card-inner {
+            position: relative;
+            background: #111; /* خلفية أفتح قليلاً من الأسود التام */
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            border-radius: 4px;
+            padding: 10px; /* حواف داخلية أصغر */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slider-container {
+            width: 100%;
+            height: 130px; /* صورة أصغر */
+            position: relative;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid #333;
+        }
+
+        .slider-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ملء الصورة بوضوح */
+            display: none;
+        }
+        .slider-img.active { display: block; }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 14px;
+            z-index: 2;
+        }
+        .slider-nav.prev { left: 0; }
+        .slider-nav.next { right: 0; }
+
+        .game-title {
+            font-size: 1em; /* خط أصغر */
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .btn-download, .btn-secondary {
+            display: block;
+            width: 100%;
+            padding: 6px; /* زر أنحف */
+            margin-top: 4px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.8em; /* خط أصغر للأزرار */
+            transition: 0.2s;
+        }
+
+        .btn-download { background: #28a745; color: white; }
+        .btn-download:hover { background: #218838; }
+
+        .btn-secondary { background: #333; color: #ddd; border: none; cursor: pointer; }
+        .btn-secondary:hover { background: #444; color: #fff; }
+        .disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; }
+
+        .game-info {
+            font-size: 0.75em; /* معلومات بخط صغير جداً وواضح */
+            color: #bbb;
+            margin-top: 8px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* --- باقي التنسيقات --- */
+        .bio-content {
+            background: rgba(20, 20, 20, 0.9);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .bio-title { font-family: 'Amiri', serif; font-size: 2em; color: #fff; margin-bottom: 15px; }
+        .bio-text { font-size: 1em; line-height: 1.6; color: #ddd; }
+        .contact-btn {
+            display: inline-block; background: #0088cc; color: white; padding: 8px 15px;
+            text-decoration: none; border-radius: 4px; margin-top: 15px; font-size: 0.9em;
+        }
+
+        .accounts-grid { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .account-card {
+            background: #1a1a1a; padding: 10px; width: 260px; border-radius: 8px;
+            border: 1px solid #333; display: flex; align-items: center; gap: 10px;
+            text-decoration: none; color: white; transition: 0.2s;
+        }
+        .account-card:hover { background: #222; transform: translateX(-5px); }
+        .account-card img { width: 40px; height: 40px; border-radius: 50%; }
+
+        .pagination { margin-top: 30px; display: flex; justify-content: center; gap: 8px; }
+        .page-btn { background: #222; color: #fff; border: 1px solid #444; padding: 5px 12px; font-size: 12px; cursor: pointer; border-radius: 3px; }
+        .page-info { font-size: 14px; font-weight: bold; align-self: center; }
+
+        /* نافذة التعليمات */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: #1a1a1a; padding: 20px; border-radius: 8px; max-width: 400px; width: 90%; border: 1px solid #444; text-align: right; position: relative; }
+        .close-modal { position: absolute; top: 10px; left: 10px; background: #a00; color: white; border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles-canvas"></canvas>
+
+    <header>
+        <div class="logo-container">
+            <img src="thesoim.png" alt="The Soim Logo" onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block'">
+            <h1 class="logo-fallback" style="display:none; color:white; font-family:'Amiri'; font-size:24px;">THE SOIM</h1>
+        </div>
+        <nav>
+            <button class="nav-btn" onclick="showSection('home')">الرئيسية</button>
+            <button class="nav-btn active" onclick="showSection('localizations')">التعريبات</button>
+            <button class="nav-btn" onclick="showSection('accounts')">حساباتي</button>
+            <a href="https://t.me/ftaxx" target="_blank" class="nav-btn" style="text-decoration:none;">تواصل معي</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="section">
+            <div class="bio-content">
+                <h2 class="bio-title">ذا سويم | The Soim</h2>
+                <div class="bio-text">
+                    <p>مطور ومعدّل محترف في عالم ألعاب وتطبيقات الأندرويد.</p>
+                    <p>أعمل على تعريب الألعاب والتطبيقات بجودة عالية مع الحفاظ على روح المحتوى الأصلية.</p>
+                    <br>
+                    <p>متخصص في تعديل الألعاب، تحسين الأداء، وإضافة مميزات جديدة تجعل اللعبة أكثر متعة.</p>
+                </div>
+                <a href="https://t.me/ftaxx" target="_blank" class="contact-btn">تواصل معي</a>
+            </div>
+        </section>
+
+        <section id="localizations" class="section active">
+            <div class="games-grid" id="games-container"></div>
+            <div class="pagination">
+                <button class="page-btn" onclick="changePage(-1)" id="prev-btn">السابق</button>
+                <span class="page-info" id="page-indicator">1 / 2</span>
+                <button class="page-btn" onclick="changePage(1)" id="next-btn">التالي</button>
+            </div>
+        </section>
+
+        <section id="accounts" class="section">
+            <div class="accounts-grid">
+                <a href="https://www.instagram.com/ftxxax?igsh=MTQzZmNjM3IyMGE4cg==" target="_blank" class="account-card">
+                    <img src="insta.png" alt="Instagram">
+                    <span class="account-name">Instagram</span>
+                </a>
+                <a href="https://youtube.com/@ftaxx?si=OUMRgkPTAl30DpCe" target="_blank" class="account-card">
+                    <img src="youtube.png" alt="YouTube">
+                    <span class="account-name">YouTube</span>
+                </a>
+                <a href="https://t.me/soi7m" target="_blank" class="account-card">
+                    <img src="telegram.png" alt="Telegram">
+                    <span class="account-name">Telegram</span>
+                </a>
+                <a href="https://www.tiktok.com/@thsoim?_r=1&_t=ZS-924zNX7dBEi" target="_blank" class="account-card">
+                    <img src="tiktok.png" alt="TikTok">
+                    <span class="account-name">TikTok</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <div id="instruction-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">X</button>
+            <div class="modal-text">
+                <h3 style="color:#0088cc; margin-bottom:10px;">طريقة إضافة التعريب</h3>
+                <ol style="margin-right:20px; font-size:0.9em; line-height:1.6; color:#ddd;">
+                    <li>استخدم <code>ZArchiver</code>.</li>
+                    <li>استخرج الملف وسيظهر مجلد <code>Telltale</code>.</li>
+                    <li>انقل <code>Telltale</code> إلى الذاكرة بجانب <code>Download</code> و <code>Android</code>.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const games = [
+            { title: "Twilight Railway", images: ["https://files.catbox.moe/hpm4g4.jpg", "https://files.catbox.moe/ou2scx.png", "https://files.catbox.moe/2egjuf.png"], download: "https://pixeldrain.com/u/KDnCt4eD", version: "v1.0.0", size: "187MB", platform: "Android" },
+            { title: "OMORI", images: ["omori1.png", "omori2.png", "omori3.png"], download: "https://pixeldrain.com/u/chYHHRMy", version: "v1.0.8.1", size: "993MB", platform: "Android" },
+            { title: "The Wolf Among Us", images: ["wolf1.png", "wolf2.png", "wolf3.png"], download: "https://pixeldrain.com/u/5Goz2NnR", version: "v1.23", size: "2.34GB", platform: "Android", extraButtons: [{ text: "ملف التعريب", link: "https://pixeldrain.com/u/homJHrvn" }, { text: "طريقة التثبيت", action: "openModal" }] },
+            { title: "Loop Hero", images: ["loop1.png", "loop2.png", "loop3.png", "loop4.png"], download: "https://pixeldrain.com/u/dhVHN4vt", version: "v1.0.5", size: "208MB", platform: "Android" },
+            { title: "Seven Mysteries", images: ["sevenmysteries1.png", "sevenmysteries2.png", "sevenmysteries3.png"], download: "https://pixeldrain.com/u/vSY6Miye", version: "v1.7", size: "94MB", platform: "Android" },
+            { title: "Undertale Red", images: ["UndertaleRed1.png", "UndertaleRed2.png", "UndertaleRed3.png"], download: "https://pixeldrain.com/u/1baa2Ci6", version: "v1.0.0", size: "27MB", platform: "Android" },
+            { title: "Our Monsoon Balcony", images: ["OurMonsoonBalcony1.png", "OurMonsoonBalcony2.png", "OurMonsoonBalcony3.png", "OurMonsoonBalcony4.png"], download: "https://pixeldrain.com/u/GCUTArQL", version: "v2.2.2", size: "14MB", platform: "Android" },
+            { title: "The Henry Stickmin", images: ["TheHenryStickminCollection1.png", "TheHenryStickminCollection2.png"], download: "https://pixeldrain.com/u/qxzpD7fB", version: "v0.2", size: "411MB", platform: "Android" },
+            { title: "Stickman Completing", images: ["StickmanCompletingtheMission1.png", "StickmanCompletingtheMission2.png", "StickmanCompletingtheMission3.png"], download: "https://pixeldrain.com/u/5DEpMhTV", version: "v1.0", size: "269MB", platform: "Android" },
+            { title: "Door Kickers", images: ["DoorKickers.png"], download: "#", version: "v1.1.35", size: "467MB", platform: "Android", isSoon: true }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        function renderGames() {
+            const container = document.getElementById('games-container');
+            container.innerHTML = '';
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const currentGames = games.slice(start, end);
+
+            currentGames.forEach((game, index) => {
+                let imagesHTML = '';
+                game.images.forEach((img, i) => {
+                    imagesHTML += `<img src="${img}" class="slider-img ${i === 0 ? 'active' : ''}" alt="${game.title}">`;
+                });
+
+                let extraBtnsHTML = '';
+                if (game.extraButtons) {
+                    game.extraButtons.forEach(btn => {
+                        if (btn.action === 'openModal') {
+                            extraBtnsHTML += `<button class="btn-secondary" onclick="openModal()">${btn.text}</button>`;
+                        } else {
+                            extraBtnsHTML += `<a href="${btn.link}" target="_blank" class="btn-secondary">${btn.text}</a>`;
+                        }
+                    });
+                }
+
+                let mainButton = game.isSoon ? `<button class="btn-download disabled">قريباً</button>` : `<a href="${game.download}" target="_blank" class="btn-download">تحميل</a>`;
+
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <div class="game-card-inner">
+                        <div class="slider-container" id="slider-${start + index}">
+                            ${imagesHTML}
+                            <button class="slider-nav prev" onclick="moveSlide(${start + index}, -1)">&#10095;</button>
+                            <button class="slider-nav next" onclick="moveSlide(${start + index}, 1)">&#10094;</button>
+                        </div>
+                        <div class="game-title">${game.title}</div>
+                        ${mainButton}
+                        ${extraBtnsHTML}
+                        <div class="game-info">${game.version} | ${game.size}<br>${game.platform}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            document.getElementById('page-indicator').innerText = `${currentPage} / ${Math.ceil(games.length / itemsPerPage)}`;
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = end >= games.length;
+        }
+
+        function changePage(direction) { currentPage += direction; renderGames(); window.scrollTo(0, 0); }
+        function moveSlide(cardIndex, direction) {
+            const slider = document.getElementById(`slider-${cardIndex}`);
+            const images = slider.querySelectorAll('.slider-img');
+            let activeIndex = 0;
+            images.forEach((img, index) => { if (img.classList.contains('active')) { activeIndex = index; img.classList.remove('active'); } });
+            let newIndex = activeIndex + direction;
+            if (newIndex >= images.length) newIndex = 0;
+            if (newIndex < 0) newIndex = images.length - 1;
+            images[newIndex].classList.add('active');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const btns = document.querySelectorAll('.nav-btn');
+            if (sectionId === 'home') btns[0].classList.add('active');
+            if (sectionId === 'localizations') btns[1].classList.add('active');
+            if (sectionId === 'accounts') btns[2].classList.add('active');
+        }
+
+        function openModal() { document.getElementById('instruction-modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('instruction-modal').style.display = 'none'; }
+
+        // Particles
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = window.innerWidth, height = window.innerHeight;
+        canvas.width = width; canvas.height = height;
+        let particles = [];
+        class Particle {
+            constructor() { this.x = Math.random() * width; this.y = Math.random() * -height; this.size = Math.random() * 2 + 1; this.speedY = Math.random() * 1.5 + 0.5; this.opacity = Math.random() * 0.4 + 0.1; }
+            update() { this.y += this.speedY; if (this.y > height) { this.y = -10; this.x = Math.random() * width; } }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`; ctx.fill(); }
+        }
+        function animateParticles() { ctx.clearRect(0, 0, width, height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+        setInterval(() => { if (particles.length < 100) particles.push(new Particle()); }, 300);
+        window.addEventListener('resize', () => { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; });
+        animateParticles(); renderGames();
+    </script>
+</body>
+</html>
