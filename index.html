@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta name="google-site-verification" content="mN7ubAHa98aauHeak5YPazh24hNLHLW2uCNpH_u7XYI" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>ذا سويم</title>
+
+    <link rel="icon" type="image/png" href="thesoim.png">
+    <link rel="shortcut icon" type="image/png" href="thesoim.png">
+
+    <meta name="description" content="تعريبات ذا سويم">
+    <meta name="keywords" content="The soim, ذا سويم, تعريبات ذا سويم, تعريبات العاب أندرويد, game Android arabic, العاب اندرويد معربه">
+    <meta name="author" content="The Soim">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="ذا سويم">
+    <meta property="og:description" content="أفضل تعريبات ألعاب الأندرويد الحصرية.">
+    <meta property="og:image" content="thesoim.png">
+    <meta property="og:url" content="https://thesoim.github.io/w/">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <button class="nav-btn" onclick="showSection('home')">الرئيسية</button>
+        <button class="nav-btn active" onclick="showSection('games')">التعريبات</button>
+        <button class="nav-btn" onclick="showSection('accounts')">حساباتي</button>
+        <button class="nav-btn" onclick="window.location.href='https://t.me/ftaxx'">تواصل معي</button>
+    </nav>
+
+    <header>
+        <img src="thesoim.png" alt="The Soim Logo" class="site-logo">
+    </header>
+
+    <section id="home" class="container">
+        <div class="profile-card">
+            <h2 class="profile-title">ذا سويم | The Soim</h2>
+            <div class="profile-text">
+                <p>مطور ومعدّل محترف في عالم ألعاب وتطبيقات الأندرويد.</p>
+                <p>أعمل على تعريب الألعاب والتطبيقات بجودة عالية مع الحفاظ على روح المحتوى الأصلية، وأهتم بتقديم تجربة استخدام سلسة وواضحة للمستخدم العربي.</p>
+                <br>
+                <p>متخصص في تعديل الألعاب، تحسين الأداء، إصلاح الأخطاء، وإضافة مميزات جديدة تجعل اللعبة أو التطبيق أكثر ثباتًا، سرعة، ومتعة في الاستخدام.</p>
+                <br>
+                <p>أقدّم أيضًا تحسينات بصرية وصوتية، وضبط الإعدادات الداخلية للألعاب لتناسب الأجهزة الضعيفة والمتوسطة بدون التضحية بجودة التجربة.</p>
+                <br>
+                <p>أسعى دائماً لتقديم نسخ محسنة، نظيفة، ومتكاملة تناسب الجميع، مع التركيز على الاحترافية، الدقة، وخبرة طويلة في هذا المجال.</p>
+            </div>
+            <a href="https://t.me/ftaxx" class="big-btn">تواصل معي</a>
+        </div>
+    </section>
+
+    <section id="accounts" class="container">
+        <div class="social-grid">
+            <a href="https://www.instagram.com/ftxxax?igsh=MTQzZmNjM3IyMGE4cg==" class="social-item">
+                <img src="insta.png" alt="Instagram" class="social-icon">
+                <h3>Instagram</h3>
+            </a>
+            <a href="https://youtube.com/@ftaxx?si=OUMRgkPTAl30DpCe" class="social-item">
+                <img src="youtube.png" alt="YouTube" class="social-icon">
+                <h3>YouTube</h3>
+            </a>
+            <a href="https://t.me/soi7m" class="social-item">
+                <img src="telegram.png" alt="Telegram" class="social-icon">
+                <h3>Telegram</h3>
+            </a>
+            <a href="https://www.tiktok.com/@thsoim?_r=1&_t=ZS-924zNX7dBEi" class="social-item">
+                <img src="tiktok.png" alt="TikTok" class="social-icon">
+                <h3>TikTok</h3>
+            </a>
+        </div>
+    </section>
+
+    <section id="games" class="container active-section">
+        <div class="games-grid" id="gamesGrid">
+            </div>
+
+        <div class="pagination">
+            <button class="page-btn" onclick="changePage(-1)">السابق</button>
+            <span class="page-info" id="pageInfo">1 / 1</span>
+            <button class="page-btn" onclick="changePage(1)">التالي</button>
+        </div>
+    </section>
+
+    <div id="gameDetailView" class="game-detail-view">
+        <div class="detail-content">
+            <button class="close-detail" onclick="closeGameDetail()">X</button>
+            <h2 id="detailTitle" class="detail-title">عنوان اللعبة</h2>
+            
+            <div class="detail-img-box">
+                <img id="detailImage" src="" alt="Game Image">
+            </div>
+
+            <div class="detail-box">
+                <h3>قصة اللعبة:</h3>
+                <p id="detailStory">نص القصة...</p>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <div class="detail-box" style="flex:1">
+                    <h3>وقت التختيم:</h3>
+                    <p id="detailTime">00 ساعة</p>
+                </div>
+                <div class="detail-box" style="flex:1">
+                    <h3>النهايات:</h3>
+                    <p id="detailEndings">عدد النهايات</p>
+                </div>
+            </div>
+
+            <div class="detail-buttons" id="detailButtons">
+                </div>
+
+            <div id="instructionsArea" class="instruction-box"></div>
+        </div>
+    </div>
+
+    <div id="live-counter-badge">
+        <div class="badge-content">
+            <div class="counter-item" title="المتواجدون الآن">
+                <div class="dot-online"></div>
+                <span id="online-count">1</span>
+            </div>
+            
+            <div style="width: 1px; height: 15px; background: rgba(255,255,255,0.2);"></div>
+
+            <div class="counter-item" title="مجموع الزيارات">
+                <svg class="icon-eye" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                <span id="total-views">...</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="games.js"></script>
+    <script src="main.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set, onDisconnect, increment, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDwFHDxbXLCohXaBwFlc5myFB9P_-QXCXE",
+            authDomain: "mygamesstore-771a0.firebaseapp.com",
+            databaseURL: "https://mygamesstore-771a0-default-rtdb.firebaseio.com",
+            projectId: "mygamesstore-771a0",
+            storageBucket: "mygamesstore-771a0.firebasestorage.app",
+            messagingSenderId: "1098590085550",
+            appId: "1:1098590085550:web:76eff1a069d7c60cd4283f",
+            measurementId: "G-NWDZGVMZF6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const onlineRef = ref(db, 'status/online');
+        const connectedRef = ref(db, '.info/connected');
+        
+        onValue(connectedRef, (snap) => {
+            if (snap.val() === true) {
+                const myCon = push(onlineRef);
+                onDisconnect(myCon).remove();
+                set(myCon, true);
+            }
+        });
+
+        onValue(onlineRef, (snap) => {
+            document.getElementById('online-count').innerText = snap.size || 1;
+        });
+
+        const totalViewsRef = ref(db, 'status/total_views');
+        
+        if (!localStorage.getItem('visited_permanently')) {
+            set(totalViewsRef, increment(1));
+            localStorage.setItem('visited_permanently', 'true');
+        }
+
+        onValue(totalViewsRef, (snap) => {
+            document.getElementById('total-views').innerText = snap.val() || 0;
+        });
+    </script>
+</body>
+</html>

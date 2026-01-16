@@ -1,0 +1,449 @@
+/* ========================================= */
+/* ملف التصميم النهائي - The Soim Royal Buttons */
+/* ========================================= */
+
+/* --- 1. المتغيرات والألوان --- */
+:root {
+    --main-bg: #05010a;       /* الخلفية الأساسية */
+    --accent-color: #ff0f0f;  /* الأحمر للتفاصيل */
+    --deep-purple: #3d0075;   /* لون الأزرار الأساسي */
+    --text-color: #f0f0f0;    
+    --card-bg: rgba(15, 5, 20, 0.8);
+}
+
+/* --- 2. إعدادات الصفحة والزغرفة الخلفية --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    
+    background-color: #020005;
+
+    /* الزغرفة الخلفية الفخمة */
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(70, 20, 120, 0.05) 0%, transparent 50%),
+        linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(20, 5, 40, 0) 50%, rgba(0,0,0,0.9) 100%),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 20px),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 20px);
+    
+    background-attachment: fixed;
+    background-size: 50% 50%, 100% 100%, 100px 100px, 100px 100px;
+    
+    color: var(--text-color);
+    overflow-x: hidden;
+    padding-bottom: 80px;
+    animation: fadeInPage 1s ease-out;
+}
+
+@keyframes fadeInPage {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* --- 3. شريط التنقل (Navbar) --- */
+.navbar {
+    position: sticky;
+    top: 0;
+    background: rgba(5, 0, 10, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+}
+
+/* تصميم أزرار التنقل الجديد */
+.nav-btn {
+    width: 95px; 
+    padding: 8px 0;
+    font-size: 0.8rem;
+    /* خلفية شفافة مع حدود خفيفة */
+    background: rgba(255, 255, 255, 0.02);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Tajawal', sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.nav-btn.active {
+    background: linear-gradient(135deg, var(--deep-purple) 0%, var(--accent-color) 100%);
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    box-shadow: 0 0 20px rgba(100, 0, 200, 0.4);
+}
+
+.nav-btn:active {
+    transform: scale(0.95); /* انضغاط الزر */
+}
+
+/* --- 4. الهيدر --- */
+header {
+    text-align: center;
+    padding-top: 60px;
+    margin-bottom: 50px;
+}
+
+.site-logo {
+    width: 220px;
+    max-width: 90%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 0 25px rgba(100, 20, 180, 0.3));
+    transition: transform 0.3s ease;
+}
+
+.site-logo:hover {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 35px rgba(100, 20, 180, 0.5));
+}
+
+/* --- 5. الحاويات --- */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    display: none;
+    animation: slideUpFade 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.container.active-section {
+    display: block;
+}
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 6. بطاقة البروفايل --- */
+.profile-card {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 1.8;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.profile-title {
+    color: var(--accent-color);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    font-weight: 800;
+    text-shadow: 0 0 20px rgba(255, 15, 15, 0.4);
+}
+
+.profile-text {
+    color: #ccc;
+    font-size: 1rem;
+    margin-bottom: 25px;
+}
+
+/* --- 7. شبكة الألعاب --- */
+.games-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 35px;
+}
+
+.game-card {
+    width: 260px;
+    background: linear-gradient(180deg, rgba(20,5,30,0.9) 0%, rgba(5,0,10,0.95) 100%);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.game-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-color);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 15, 15, 0.2);
+}
+
+.game-card:active {
+    transform: scale(0.97);
+}
+
+/* --- 8. السلايدر --- */
+.slider-container {
+    width: 100%;
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    background-color: #000;
+}
+
+.slider-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none;
+}
+.slider-img.active { display: block; }
+
+.slider-nav {
+    position: absolute;
+    top: 50%; width: 100%;
+    transform: translateY(-50%);
+    display: flex; justify-content: space-between;
+    padding: 0 5px; pointer-events: none;
+}
+.arrow {
+    color: white; background: rgba(0,0,0,0.6);
+    border-radius: 50%; width: 28px; height: 28px;
+    text-align: center; line-height: 28px; font-size: 16px;
+    cursor: pointer; pointer-events: auto; transition: 0.2s;
+}
+.arrow:hover { background: var(--accent-color); }
+
+.game-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 8px 0;
+    text-align: center;
+    color: #fff;
+}
+
+/* 👇👇 تصميم زر التحميل الصغير (المختلف والفخم) 👇👇 */
+.download-btn {
+    /* تدرج لوني فخم من البنفسجي الغامق إلى الأحمر الخافت */
+    background: linear-gradient(90deg, #2a004d 0%, #4a0010 100%);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 30px;
+    border-radius: 50px; /* جعل الحواف دائرية بالكامل */
+    font-size: 0.85rem;
+    text-decoration: none;
+    margin-top: 8px;
+    display: inline-block;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+/* لمعة خفيفة عند التمرير */
+.download-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
+
+.download-btn:hover {
+    background: linear-gradient(90deg, var(--accent-color) 0%, #2a004d 100%);
+    box-shadow: 0 0 20px rgba(255, 15, 15, 0.4);
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.4);
+}
+
+.download-btn:hover::before {
+    left: 100%; /* تحريك اللمعة */
+}
+
+.download-btn:active {
+    transform: scale(0.90); /* انضغاط قوي */
+}
+
+.game-info-small {
+    font-size: 0.75rem;
+    color: #666; 
+    margin-top: 8px;
+    text-align: center;
+}
+
+/* 👇👇 تصميم أزرار التالي والسابق (مميزة) 👇👇 */
+.pagination {
+    display: flex; justify-content: center; align-items: center;
+    gap: 20px; margin-top: 50px;
+}
+.page-btn {
+    background: rgba(255,255,255,0.03);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 30px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-weight: bold;
+    font-family: 'Tajawal', sans-serif;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.page-btn:hover { 
+    background: var(--deep-purple); 
+    border-color: var(--accent-color); 
+    box-shadow: 0 0 20px rgba(61, 0, 117, 0.6);
+    transform: translateY(-3px);
+}
+
+.page-btn:active {
+    transform: scale(0.95) translateY(0);
+}
+
+/* --- 10. الشبكة الاجتماعية --- */
+.social-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 25px;
+}
+.social-item {
+    background: rgba(0,0,0,0.5);
+    padding: 30px; border-radius: 15px; text-align: center;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: 0.3s; text-decoration: none; color: white;
+}
+.social-item:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-5px);
+    background: rgba(20, 0, 30, 0.8);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+.social-icon { width: 60px; height: 60px; margin-bottom: 15px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.8)); }
+
+/* --- 11. النافذة المنبثقة (Pop-up) --- */
+.game-detail-view {
+    display: none; position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.97); 
+    z-index: 2000; overflow-y: auto;
+    padding: 20px; animation: zoomIn 0.3s ease;
+}
+@keyframes zoomIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.detail-content {
+    max-width: 700px; margin: 50px auto;
+    background: #0a0210;
+    border-radius: 20px; padding: 30px;
+    position: relative; text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 50px rgba(0,0,0,1);
+}
+.close-detail {
+    position: absolute; top: 20px; left: 20px;
+    background: transparent; color: #fff;
+    border: 1px solid rgba(255,255,255,0.1); width: 35px; height: 35px;
+    border-radius: 50%; cursor: pointer; font-weight: bold;
+    transition: 0.3s;
+}
+.close-detail:hover { background: var(--accent-color); border-color: var(--accent-color); }
+
+.detail-title {
+    color: var(--accent-color); font-size: 2.2rem;
+    margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px; display: inline-block;
+}
+.detail-img-box {
+    width: 100%; height: 300px; overflow: hidden;
+    border-radius: 12px; margin-bottom: 25px;
+    border: 1px solid rgba(255,255,255,0.05); background: #000;
+}
+.detail-img-box img { width: 100%; height: 100%; object-fit: contain; }
+.detail-box {
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.3);
+    padding: 20px; border-radius: 10px;
+    margin-bottom: 20px; text-align: right;
+}
+.detail-box h3 { color: var(--accent-color); font-size: 1.1rem; margin-bottom: 8px; }
+
+/* 👇👇 تصميم الزر الكبير داخل التفاصيل 👇👇 */
+.big-btn {
+    width: 100%; max-width: 350px; padding: 16px;
+    /* تدرج لوني عمودي */
+    background: linear-gradient(180deg, #4a148c 0%, #2a0a55 100%);
+    color: white; text-decoration: none;
+    border-radius: 12px; font-weight: bold; display: block;
+    border: 1px solid rgba(255,255,255,0.1); 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة مرنة (bouncy) */
+    margin: 15px auto;
+}
+.big-btn:hover { 
+    background: linear-gradient(180deg, var(--accent-color) 0%, #8a0000 100%);
+    box-shadow: 0 10px 30px rgba(255, 15, 15, 0.3); 
+    transform: translateY(-3px) scale(1.02);
+}
+.big-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.instruction-box {
+    background: #05010a; padding: 20px; text-align: right;
+    border-radius: 8px; margin-top: 20px; display: none;
+    font-size: 0.95rem; color: #ccc; border-right: 4px solid var(--accent-color);
+}
+
+/* --- 12. عداد الزوار --- */
+#live-counter-badge {
+    position: fixed; bottom: 20px; right: 20px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 15px; padding: 10px 25px; 
+    border-radius: 50px;
+    font-family: 'Tajawal', sans-serif;
+    color: #fff; z-index: 10000; direction: rtl; user-select: none;
+    
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.badge-content {
+    display: flex; align-items: center; gap: 15px;
+}
+.counter-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: bold;
+}
+.dot-online {
+    width: 10px; height: 10px; background-color: #00e676;
+    border-radius: 50%; box-shadow: 0 0 10px #00e676;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 230, 118, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+}
+.icon-eye { width: 18px; height: 18px; fill: #ffffff; opacity: 0.9; }
